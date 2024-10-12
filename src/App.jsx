@@ -1,11 +1,10 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import AddTodoForm from "./AddTodoForm";
 import "./App.css";
 import TodoList from "./TodoList";
 
 function App() {
   const [todoList, setTodoList] = useState([]);
-
   const [ascSort, setAscSort] = useState(true);
 
   const toggleSort = () => {
@@ -17,14 +16,26 @@ function App() {
     setTodoList(newTodoList);
   };
 
-  const removeTodo = (id) => {
-    const newList = todoList.filter((item) => item.id !== id);
-    setTodoList(newList);
+  const handleRemoveTodo = (id) => {
+    const newTodoList = todoList.filter((item) => item.id !== id);
+    setTodoList(newTodoList);
+  };
+
+  const toggleCompleteTodo = (id) => {
+    const updatedTasks = todoList.map((item) =>
+      item.id === id
+        ? {
+            ...item,
+            completed: !item.completed,
+          }
+        : item
+    );
+    setTodoList(updatedTasks);
   };
 
   return (
     <>
-      <h1>Todo List</h1>
+      <h1>TodoList</h1>
       <AddTodoForm onAddTodo={addTodo} />
       {ascSort ? (
         <button onClick={toggleSort}>Sort A-Z</button>
@@ -34,7 +45,8 @@ function App() {
 
       <TodoList
         todoList={todoList}
-        onRemoveTodo={removeTodo}
+        onRemoveTodo={handleRemoveTodo}
+        toggleCompleteTodo={toggleCompleteTodo}
         ascSort={ascSort}
       />
     </>

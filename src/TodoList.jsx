@@ -1,32 +1,28 @@
-import PropTypes from "prop-types";
 import TodoListItem from "./TodoListItem";
-import { useEffect, useState } from "react";
+import PropTypes from "prop-types";
 
-//Type-checking tool for props
 TodoList.propTypes = {
   todoList: PropTypes.array.isRequired,
   onRemoveTodo: PropTypes.func.isRequired,
+  toggleCompleteTodo: PropTypes.func.isRequired,
+  ascSort: PropTypes.bool.isRequired,
 };
 
-function TodoList({ todoList, onRemoveTodo, ascSort }) {
-  console.log("ascSort", ascSort);
-  console.log("todoList", todoList);
-
-  const sortTodosByFieldAsc = (objectA, objectB) => {
-    if (objectA.title.toUpperCase() < objectB.title.toUpperCase()) {
+function TodoList({ todoList, onRemoveTodo, toggleCompleteTodo, ascSort }) {
+  const sortTodosAsc = (objA, objB) => {
+    if (objA.title.toUpperCase() < objB.title.toUpperCase()) {
       return -1;
     }
-    if (objectA.title.toUpperCase() > objectB.title.toUpperCase()) {
+    if (objA.title.toUpperCase() > objB.title.toUpperCase()) {
       return 1;
     }
     return 0;
   };
-
-  const sortTodosByFieldDsc = (objectA, objectB) => {
-    if (objectA.title.toUpperCase() < objectB.title.toUpperCase()) {
+  const sortTodosDsc = (objA, objB) => {
+    if (objA.title.toUpperCase() < objB.title.toUpperCase()) {
       return 1;
     }
-    if (objectA.title.toUpperCase() > objectB.title.toUpperCase()) {
+    if (objA.title.toUpperCase() > objB.title.toUpperCase()) {
       return -1;
     }
     return 0;
@@ -36,25 +32,30 @@ function TodoList({ todoList, onRemoveTodo, ascSort }) {
     <ul>
       {ascSort
         ? todoList
-            .sort(sortTodosByFieldAsc)
+            .sort(sortTodosAsc)
             .map((item) => (
               <TodoListItem
                 key={item.id}
                 todo={item.title}
-                id={item.id}
                 onRemoveTodo={onRemoveTodo}
+                id={item.id}
+                toggleCompleteTodo={toggleCompleteTodo}
+                completed={item.completed}
               />
             ))
         : todoList
-            .sort(sortTodosByFieldDsc)
+            .sort(sortTodosDsc)
             .map((item) => (
               <TodoListItem
                 key={item.id}
                 todo={item.title}
-                id={item.id}
                 onRemoveTodo={onRemoveTodo}
+                id={item.id}
+                toggleCompleteTodo={toggleCompleteTodo}
+                completed={item.completed}
               />
             ))}
+      {}
     </ul>
   );
 }
